@@ -1,16 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 
-const ADMIN_ROUTES = ['/admin']
+const PUBLIC_ADMIN_ROUTES = ['/admin/login']
 const COOKIE_NAME = 'admin_session'
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
 
-  // Check if the route requires authentication
-  const requiresAuth = ADMIN_ROUTES.some(route => pathname.startsWith(route))
+  // Skip auth check for login page
+  if (PUBLIC_ADMIN_ROUTES.includes(pathname)) {
+    return NextResponse.next()
+  }
 
-  if (requiresAuth) {
+  // Check if the route is under /admin (which requires authentication)
+  if (pathname.startsWith('/admin')) {
     const cookieStore = await cookies()
     const session = cookieStore.get(COOKIE_NAME)?.value
 

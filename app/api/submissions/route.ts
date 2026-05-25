@@ -49,8 +49,10 @@ export async function POST(request: NextRequest) {
       additional_info,
     })
 
-    // Send confirmation email
-    await sendSubmissionConfirmation(submitter_name, submitter_email, model_name)
+    // Send confirmation email (non-blocking - don't fail submission if email fails)
+    sendSubmissionConfirmation(submitter_name, submitter_email, model_name).catch((err) => {
+      console.error('Email send failed:', err)
+    })
 
     return NextResponse.json(
       { success: true, submission },
