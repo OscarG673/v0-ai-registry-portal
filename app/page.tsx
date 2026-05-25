@@ -19,11 +19,14 @@ export default function Page() {
               <p className="mt-1 text-sm text-slate-600">Discover and contribute AI models</p>
             </div>
             <div className="flex gap-4">
+              <Link href="/register">
+                <Button>Register AI System</Button>
+              </Link>
               <Link href="/submit">
-                <Button>Submit a Model</Button>
+                <Button variant="outline">Submit a Model</Button>
               </Link>
               <Link href="/admin/login">
-                <Button variant="outline">Admin</Button>
+                <Button variant="ghost">Admin</Button>
               </Link>
             </div>
           </div>
