@@ -2,7 +2,12 @@ import bcryptjs from 'bcryptjs'
 import { neon } from '@neondatabase/serverless'
 import { cookies } from 'next/headers'
 
-const sql = neon(process.env.DATABASE_URL!)
+const getSql = () => {
+  if (!process.env.DATABASE_URL) {
+    throw new Error('DATABASE_URL environment variable is not set')
+  }
+  return neon(process.env.DATABASE_URL)
+}
 
 interface AdminUser {
   id: number
@@ -30,6 +35,7 @@ export async function createAdminUser(
   password: string,
   email?: string
 ): Promise<AdminUser> {
+  const sql = getSql()
   const hashedPassword = await hashPassword(password)
   const result = await sql`
     INSERT INTO admin_users (username, password_hash, email)
@@ -40,6 +46,7 @@ export async function createAdminUser(
 }
 
 export async function getAdminByUsername(username: string) {
+  const sql = getSql()
   const result = await sql`
     SELECT id, username, password_hash, email FROM admin_users WHERE username = ${username}
   `
@@ -85,6 +92,7 @@ export async function getAuthenticatedAdmin(): Promise<AdminUser | null> {
     return null
   }
 
+  const sql = getSql()
   const result = await sql`
     SELECT id, username, email FROM admin_users WHERE id = ${session.adminId}
   `

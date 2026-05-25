@@ -1,12 +1,21 @@
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const getResend = () => {
+  if (!process.env.RESEND_API_KEY) {
+    console.warn('RESEND_API_KEY is not set. Email notifications will not be sent.')
+    return null
+  }
+  return new Resend(process.env.RESEND_API_KEY)
+}
 
 export async function sendSubmissionConfirmation(
   submitterName: string,
   submitterEmail: string,
   modelName: string
 ) {
+  const resend = getResend()
+  if (!resend) return
+
   try {
     await resend.emails.send({
       from: 'AI Registry <noreply@airegistry.dev>',
@@ -30,6 +39,9 @@ export async function sendApprovalNotification(
   submitterEmail: string,
   modelName: string
 ) {
+  const resend = getResend()
+  if (!resend) return
+
   try {
     await resend.emails.send({
       from: 'AI Registry <noreply@airegistry.dev>',
@@ -55,6 +67,9 @@ export async function sendRejectionNotification(
   modelName: string,
   reason: string
 ) {
+  const resend = getResend()
+  if (!resend) return
+
   try {
     await resend.emails.send({
       from: 'AI Registry <noreply@airegistry.dev>',

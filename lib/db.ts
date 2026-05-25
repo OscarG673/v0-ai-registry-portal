@@ -1,6 +1,11 @@
 import { neon } from '@neondatabase/serverless'
 
-const sql = neon(process.env.DATABASE_URL!)
+const getSql = () => {
+  if (!process.env.DATABASE_URL) {
+    throw new Error('DATABASE_URL environment variable is not set')
+  }
+  return neon(process.env.DATABASE_URL)
+}
 
 export interface AIModel {
   id: number
@@ -43,6 +48,7 @@ export async function getAllModels(
   limit: number = 50,
   offset: number = 0
 ): Promise<AIModel[]> {
+  const sql = getSql()
   if (category) {
     const result = await sql`
       SELECT * FROM ai_models WHERE category = ${category} 
@@ -59,11 +65,13 @@ export async function getAllModels(
 }
 
 export async function getModelById(id: number): Promise<AIModel | null> {
+  const sql = getSql()
   const result = await sql`SELECT * FROM ai_models WHERE id = ${id}`
   return result.length > 0 ? (result[0] as AIModel) : null
 }
 
 export async function searchModels(searchTerm: string): Promise<AIModel[]> {
+  const sql = getSql()
   const searchPattern = `%${searchTerm}%`
   const result = await sql`
     SELECT * FROM ai_models 
@@ -76,6 +84,7 @@ export async function searchModels(searchTerm: string): Promise<AIModel[]> {
 }
 
 export async function getModelsByTag(tag: string): Promise<AIModel[]> {
+  const sql = getSql()
   const result = await sql`
     SELECT * FROM ai_models 
     WHERE tags @> ARRAY[${tag}]
@@ -85,6 +94,7 @@ export async function getModelsByTag(tag: string): Promise<AIModel[]> {
 }
 
 export async function createModel(modelData: Partial<AIModel>): Promise<AIModel> {
+  const sql = getSql()
   const capsJson = modelData.capabilities ? JSON.stringify(modelData.capabilities) : null
   const metricsJson = modelData.performance_metrics ? JSON.stringify(modelData.performance_metrics) : null
   const tagsJson = modelData.tags ? JSON.stringify(modelData.tags) : null
@@ -112,6 +122,7 @@ export async function getPendingSubmissions(
   limit: number = 50,
   offset: number = 0
 ): Promise<ModelSubmission[]> {
+  const sql = getSql()
   const result = await sql`
     SELECT * FROM model_submissions 
     WHERE status = 'pending'
@@ -122,6 +133,7 @@ export async function getPendingSubmissions(
 }
 
 export async function getSubmissionById(id: number): Promise<ModelSubmission | null> {
+  const sql = getSql()
   const result = await sql`SELECT * FROM model_submissions WHERE id = ${id}`
   return result.length > 0 ? (result[0] as ModelSubmission) : null
 }
@@ -129,6 +141,7 @@ export async function getSubmissionById(id: number): Promise<ModelSubmission | n
 export async function createSubmission(
   submissionData: Partial<ModelSubmission>
 ): Promise<ModelSubmission> {
+  const sql = getSql()
   const capsJson = submissionData.capabilities ? JSON.stringify(submissionData.capabilities) : null
   const infoJson = submissionData.additional_info ? JSON.stringify(submissionData.additional_info) : null
   
@@ -155,6 +168,7 @@ export async function approveSubmission(
   submissionId: number,
   adminId: number
 ): Promise<{ submission: ModelSubmission; model: AIModel }> {
+  const sql = getSql()
   const submission = await getSubmissionById(submissionId)
   if (!submission) {
     throw new Error('Submission not found')
@@ -192,6 +206,7 @@ export async function rejectSubmission(
   adminId: number,
   reason: string
 ): Promise<ModelSubmission> {
+  const sql = getSql()
   const result = await sql`
     UPDATE model_submissions 
     SET status = 'rejected', reviewed_at = CURRENT_TIMESTAMP, 
@@ -203,6 +218,7 @@ export async function rejectSubmission(
 }
 
 export async function getSubmissionsByEmail(email: string): Promise<ModelSubmission[]> {
+  const sql = getSql()
   const result = await sql`
     SELECT * FROM model_submissions 
     WHERE submitter_email = ${email}
