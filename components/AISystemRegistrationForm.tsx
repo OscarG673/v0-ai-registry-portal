@@ -25,7 +25,8 @@ import {
   Shield,
   Cpu,
   FileCheck,
-  HelpCircle
+  HelpCircle,
+  ExternalLink
 } from 'lucide-react'
 
 const SECTORES = [
@@ -616,10 +617,21 @@ export default function AISystemRegistrationForm() {
               <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
                 <div className="flex gap-3">
                   <HelpCircle className="h-5 w-5 shrink-0 text-blue-600" />
-                  <p className="text-sm text-blue-800">
-                    Clasifique el nivel de riesgo de su sistema segun el impacto potencial en las personas.
-                    La ANIA podra revisar y ajustar esta clasificacion.
-                  </p>
+                  <div className="space-y-2">
+                    <p className="text-sm text-blue-800">
+                      Clasifique el nivel de riesgo de su sistema segun el impacto potencial en las personas.
+                      La ANIA podra revisar y ajustar esta clasificacion.
+                    </p>
+                    <a 
+                      href="https://www.jurisprudencia.gob.sv/DocumentosBoveda/D/2/2020-2029/2024/12/E81CF.PDF" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-sm font-medium text-blue-700 hover:text-blue-900 hover:underline"
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                      Conocer mas sobre la clasificacion de riesgo
+                    </a>
+                  </div>
                 </div>
               </div>
 
