@@ -95,9 +95,9 @@ export async function getModelsByTag(tag: string): Promise<AIModel[]> {
 
 export async function createModel(modelData: Partial<AIModel>): Promise<AIModel> {
   const sql = getSql()
-  const capsJson = modelData.capabilities ? JSON.stringify(modelData.capabilities) : null
-  const metricsJson = modelData.performance_metrics ? JSON.stringify(modelData.performance_metrics) : null
-  const tagsJson = modelData.tags ? JSON.stringify(modelData.tags) : null
+  const capabilities = modelData.capabilities || []
+  const tags = modelData.tags || []
+  const performanceMetrics = modelData.performance_metrics || {}
   
   const result = await sql`
     INSERT INTO ai_models (
@@ -108,9 +108,9 @@ export async function createModel(modelData: Partial<AIModel>): Promise<AIModel>
       ${modelData.name}, ${modelData.description || null}, 
       ${modelData.category || null}, ${modelData.license_type || null},
       ${modelData.source_url || null}, ${modelData.documentation_url || null},
-      ${capsJson},
-      ${metricsJson},
-      ${tagsJson}
+      ${capabilities},
+      ${JSON.stringify(performanceMetrics)},
+      ${tags}
     )
     RETURNING *
   `
@@ -142,8 +142,8 @@ export async function createSubmission(
   submissionData: Partial<ModelSubmission>
 ): Promise<ModelSubmission> {
   const sql = getSql()
-  const capsJson = submissionData.capabilities ? JSON.stringify(submissionData.capabilities) : null
-  const infoJson = submissionData.additional_info ? JSON.stringify(submissionData.additional_info) : null
+  const capabilities = submissionData.capabilities || []
+  const additionalInfo = submissionData.additional_info || {}
   
   const result = await sql`
     INSERT INTO model_submissions (
@@ -155,8 +155,8 @@ export async function createSubmission(
       ${submissionData.model_name}, ${submissionData.model_description || null},
       ${submissionData.category || null}, ${submissionData.license_type || null},
       ${submissionData.source_url || null}, ${submissionData.documentation_url || null},
-      ${capsJson},
-      ${infoJson},
+      ${capabilities},
+      ${JSON.stringify(additionalInfo)},
       'pending'
     )
     RETURNING *

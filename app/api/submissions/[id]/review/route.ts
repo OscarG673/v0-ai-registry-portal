@@ -37,11 +37,12 @@ export async function POST(
 
     if (action === 'approve') {
       const result = await approveSubmission(submissionId, admin.id)
-      await sendApprovalNotification(
+      // Non-blocking email notification
+      sendApprovalNotification(
         submission.submitter_name,
         submission.submitter_email,
         submission.model_name
-      )
+      ).catch((err) => console.error('Email send failed:', err))
       return NextResponse.json(
         { success: true, submission: result.submission, model: result.model },
         { status: 200 }
@@ -55,12 +56,13 @@ export async function POST(
       }
 
       const updatedSubmission = await rejectSubmission(submissionId, admin.id, reason)
-      await sendRejectionNotification(
+      // Non-blocking email notification
+      sendRejectionNotification(
         submission.submitter_name,
         submission.submitter_email,
         submission.model_name,
         reason
-      )
+      ).catch((err) => console.error('Email send failed:', err))
       return NextResponse.json(
         { success: true, submission: updatedSubmission },
         { status: 200 }
