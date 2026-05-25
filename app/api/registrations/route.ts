@@ -40,29 +40,40 @@ export async function POST(request: NextRequest) {
       'compliance_pathway',
       'capabilities_description',
       'data_handling_practices',
-      'incident_response_plan',
     ]
 
     for (const field of requiredFields) {
       if (!data[field]) {
         return NextResponse.json(
-          { error: `Missing required field: ${field}` },
+          { error: `Campo requerido faltante: ${field}` },
           { status: 400 }
         )
       }
     }
 
+    // Map Spanish risk tiers to DB values
+    const riskTierMap: Record<string, string> = {
+      'BAJO': 'LOW',
+      'MEDIO': 'MEDIUM',
+      'ALTO': 'HIGH',
+      'SANDBOX': 'SANDBOX',
+      'LOW': 'LOW',
+      'MEDIUM': 'MEDIUM',
+      'HIGH': 'HIGH',
+    }
+    const dbRiskTier = riskTierMap[data.risk_tier] || data.risk_tier
+
     // Validate HIGH risk additional fields
-    if (data.risk_tier === 'HIGH') {
+    if (dbRiskTier === 'HIGH') {
       if (!data.hitl_safeguards) {
         return NextResponse.json(
-          { error: 'HITL safeguards required for HIGH risk tier' },
+          { error: 'Salvaguardas humanas requeridas para riesgo ALTO' },
           { status: 400 }
         )
       }
       if (!data.right_to_challenge) {
         return NextResponse.json(
-          { error: 'Right to challenge mechanism required for HIGH risk tier' },
+          { error: 'Mecanismo de impugnacion requerido para riesgo ALTO' },
           { status: 400 }
         )
       }
@@ -71,7 +82,7 @@ export async function POST(request: NextRequest) {
     // Validate consent checkboxes
     if (!data.art5_principles_accepted || !data.audit_summary_consent || !data.change_notification_commitment) {
       return NextResponse.json(
-        { error: 'All consent checkboxes must be accepted' },
+        { error: 'Debe aceptar todas las declaraciones' },
         { status: 400 }
       )
     }
@@ -115,7 +126,7 @@ export async function POST(request: NextRequest) {
         ${data.purpose_description},
         ${data.sector},
         ${data.geographic_scope},
-        ${data.risk_tier},
+        ${dbRiskTier},
         ${data.tier_justification},
         ${data.compliance_pathway},
         ${data.hitl_safeguards || null},
@@ -123,7 +134,7 @@ export async function POST(request: NextRequest) {
         ${data.capabilities_description},
         ${data.performance_metrics || null},
         ${data.data_handling_practices},
-        ${data.incident_response_plan},
+        ${data.incident_response_plan || null},
         ${data.art5_principles_accepted},
         ${data.audit_summary_consent},
         ${data.change_notification_commitment}
@@ -140,7 +151,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Registration error:', error)
     return NextResponse.json(
-      { error: 'Failed to create registration' },
+      { error: 'Error al crear el registro' },
       { status: 500 }
     )
   }

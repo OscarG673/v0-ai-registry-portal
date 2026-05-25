@@ -15,100 +15,142 @@ import {
 } from '@/components/ui/select'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
-import { CheckCircle2, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react'
+import { 
+  CheckCircle2, 
+  ChevronLeft, 
+  ChevronRight, 
+  Loader2,
+  Building2,
+  Bot,
+  Shield,
+  Cpu,
+  FileCheck,
+  HelpCircle
+} from 'lucide-react'
 
-const SECTORS = [
-  'Healthcare',
-  'Finance & Banking',
-  'Education',
-  'Government & Public Sector',
-  'Transportation',
-  'Energy & Utilities',
-  'Retail & E-commerce',
-  'Manufacturing',
-  'Agriculture',
-  'Telecommunications',
-  'Legal Services',
-  'Human Resources',
-  'Security & Defense',
-  'Entertainment & Media',
-  'Other',
+const SECTORES = [
+  { value: 'salud', label: 'Salud' },
+  { value: 'finanzas', label: 'Finanzas y Banca' },
+  { value: 'educacion', label: 'Educacion' },
+  { value: 'gobierno', label: 'Gobierno y Sector Publico' },
+  { value: 'transporte', label: 'Transporte y Logistica' },
+  { value: 'energia', label: 'Energia y Servicios Publicos' },
+  { value: 'comercio', label: 'Comercio y E-commerce' },
+  { value: 'manufactura', label: 'Manufactura e Industria' },
+  { value: 'agricultura', label: 'Agricultura y Agroindustria' },
+  { value: 'telecomunicaciones', label: 'Telecomunicaciones' },
+  { value: 'legal', label: 'Servicios Legales' },
+  { value: 'rrhh', label: 'Recursos Humanos' },
+  { value: 'seguridad', label: 'Seguridad' },
+  { value: 'medios', label: 'Medios y Entretenimiento' },
+  { value: 'otro', label: 'Otro' },
 ]
 
-const GEOGRAPHIC_SCOPES = [
-  'Local (Municipal)',
-  'Regional (Departmental)',
-  'National',
-  'Central America',
-  'Latin America',
-  'International',
+const ALCANCE_GEOGRAFICO = [
+  { value: 'municipal', label: 'Municipal' },
+  { value: 'departamental', label: 'Departamental' },
+  { value: 'nacional', label: 'Nacional' },
+  { value: 'centroamerica', label: 'Centroamerica' },
+  { value: 'latinoamerica', label: 'Latinoamerica' },
+  { value: 'internacional', label: 'Internacional' },
 ]
 
 interface FormData {
-  // Section 1: Entity Info
-  deployer_name: string
+  // Seccion 1: Informacion de la Entidad
+  nombre_entidad: string
   nit: string
-  contact_email: string
-  developer_name: string
-  // Section 2: System Overview
-  system_name: string
-  system_version: string
-  purpose_description: string
+  email_contacto: string
+  telefono: string
+  nombre_desarrollador: string
+  
+  // Seccion 2: Informacion del Sistema IA
+  nombre_sistema: string
+  version: string
+  descripcion_proposito: string
   sector: string
-  geographic_scope: string
-  // Section 3: Risk & Compliance
-  risk_tier: string
-  tier_justification: string
-  compliance_pathway: string
-  hitl_safeguards: string
-  right_to_challenge: string
-  // Section 4: Technical
-  capabilities_description: string
-  performance_metrics: string
-  // Section 5: Operational & Safety
-  data_handling_practices: string
-  incident_response_plan: string
-  // Section 6: Transparency & Consent
-  art5_principles_accepted: boolean
-  audit_summary_consent: boolean
-  change_notification_commitment: boolean
+  alcance_geografico: string
+  
+  // Seccion 3: Clasificacion de Riesgo
+  nivel_riesgo: string
+  justificacion_riesgo: string
+  via_cumplimiento: string
+  salvaguardas_humanas: string
+  mecanismo_impugnacion: string
+  
+  // Seccion 4: Especificaciones Tecnicas
+  capacidades_sistema: string
+  metricas_rendimiento: string
+  
+  // Seccion 5: Seguridad y Datos
+  manejo_datos: string
+  plan_incidentes: string
+  
+  // Seccion 6: Declaraciones y Consentimiento
+  acepta_principios_eticos: boolean
+  acepta_auditoria: boolean
+  acepta_notificacion_cambios: boolean
 }
 
 const initialFormData: FormData = {
-  deployer_name: '',
+  nombre_entidad: '',
   nit: '',
-  contact_email: '',
-  developer_name: '',
-  system_name: '',
-  system_version: '',
-  purpose_description: '',
+  email_contacto: '',
+  telefono: '',
+  nombre_desarrollador: '',
+  nombre_sistema: '',
+  version: '',
+  descripcion_proposito: '',
   sector: '',
-  geographic_scope: '',
-  risk_tier: '',
-  tier_justification: '',
-  compliance_pathway: '',
-  hitl_safeguards: '',
-  right_to_challenge: '',
-  capabilities_description: '',
-  performance_metrics: '',
-  data_handling_practices: '',
-  incident_response_plan: '',
-  art5_principles_accepted: false,
-  audit_summary_consent: false,
-  change_notification_commitment: false,
+  alcance_geografico: '',
+  nivel_riesgo: '',
+  justificacion_riesgo: '',
+  via_cumplimiento: '',
+  salvaguardas_humanas: '',
+  mecanismo_impugnacion: '',
+  capacidades_sistema: '',
+  metricas_rendimiento: '',
+  manejo_datos: '',
+  plan_incidentes: '',
+  acepta_principios_eticos: false,
+  acepta_auditoria: false,
+  acepta_notificacion_cambios: false,
 }
 
-const STEPS = [
-  { id: 1, title: 'Entity Info', description: 'Organization details' },
-  { id: 2, title: 'System Overview', description: 'AI system details' },
-  { id: 3, title: 'Risk & Compliance', description: 'Risk assessment' },
-  { id: 4, title: 'Technical', description: 'Technical specifications' },
-  { id: 5, title: 'Operational & Safety', description: 'Safety measures' },
-  { id: 6, title: 'Transparency', description: 'Consent & commitments' },
+const PASOS = [
+  { 
+    id: 1, 
+    titulo: 'Entidad', 
+    descripcion: 'Informacion de su organizacion',
+    icon: Building2 
+  },
+  { 
+    id: 2, 
+    titulo: 'Sistema IA', 
+    descripcion: 'Detalles del sistema',
+    icon: Bot 
+  },
+  { 
+    id: 3, 
+    titulo: 'Riesgo', 
+    descripcion: 'Clasificacion y cumplimiento',
+    icon: Shield 
+  },
+  { 
+    id: 4, 
+    titulo: 'Tecnico', 
+    descripcion: 'Capacidades del sistema',
+    icon: Cpu 
+  },
+  { 
+    id: 5, 
+    titulo: 'Declaraciones', 
+    descripcion: 'Consentimiento final',
+    icon: FileCheck 
+  },
 ]
 
 export default function AISystemRegistrationForm() {
-  const [currentStep, setCurrentStep] = useState(1)
+  const [pasoActual, setPasoActual] = useState(1)
   const [formData, setFormData] = useState<FormData>(initialFormData)
   const [loading, setLoading] = useState(false)
   const [registryId, setRegistryId] = useState<string | null>(null)
@@ -121,44 +163,42 @@ export default function AISystemRegistrationForm() {
     }
   }
 
-  const validateStep = (step: number): boolean => {
+  const validarPaso = (paso: number): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
 
-    switch (step) {
+    switch (paso) {
       case 1:
-        if (!formData.deployer_name.trim()) newErrors.deployer_name = 'Required'
-        if (!formData.nit.trim()) newErrors.nit = 'Required'
-        if (!formData.contact_email.trim()) newErrors.contact_email = 'Required'
-        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.contact_email)) {
-          newErrors.contact_email = 'Invalid email'
+        if (!formData.nombre_entidad.trim()) newErrors.nombre_entidad = 'Este campo es requerido'
+        if (!formData.nit.trim()) newErrors.nit = 'Este campo es requerido'
+        if (!formData.email_contacto.trim()) {
+          newErrors.email_contacto = 'Este campo es requerido'
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email_contacto)) {
+          newErrors.email_contacto = 'Ingrese un email valido'
         }
         break
       case 2:
-        if (!formData.system_name.trim()) newErrors.system_name = 'Required'
-        if (!formData.purpose_description.trim()) newErrors.purpose_description = 'Required'
-        if (!formData.sector) newErrors.sector = 'Required'
-        if (!formData.geographic_scope) newErrors.geographic_scope = 'Required'
+        if (!formData.nombre_sistema.trim()) newErrors.nombre_sistema = 'Este campo es requerido'
+        if (!formData.descripcion_proposito.trim()) newErrors.descripcion_proposito = 'Este campo es requerido'
+        if (!formData.sector) newErrors.sector = 'Seleccione un sector'
+        if (!formData.alcance_geografico) newErrors.alcance_geografico = 'Seleccione el alcance'
         break
       case 3:
-        if (!formData.risk_tier) newErrors.risk_tier = 'Required'
-        if (!formData.tier_justification.trim()) newErrors.tier_justification = 'Required'
-        if (!formData.compliance_pathway) newErrors.compliance_pathway = 'Required'
-        if (formData.risk_tier === 'HIGH') {
-          if (!formData.hitl_safeguards.trim()) newErrors.hitl_safeguards = 'Required for HIGH risk'
-          if (!formData.right_to_challenge.trim()) newErrors.right_to_challenge = 'Required for HIGH risk'
+        if (!formData.nivel_riesgo) newErrors.nivel_riesgo = 'Seleccione un nivel de riesgo'
+        if (!formData.justificacion_riesgo.trim()) newErrors.justificacion_riesgo = 'Este campo es requerido'
+        if (!formData.via_cumplimiento) newErrors.via_cumplimiento = 'Seleccione una via de cumplimiento'
+        if (formData.nivel_riesgo === 'ALTO') {
+          if (!formData.salvaguardas_humanas.trim()) newErrors.salvaguardas_humanas = 'Requerido para riesgo ALTO'
+          if (!formData.mecanismo_impugnacion.trim()) newErrors.mecanismo_impugnacion = 'Requerido para riesgo ALTO'
         }
         break
       case 4:
-        if (!formData.capabilities_description.trim()) newErrors.capabilities_description = 'Required'
+        if (!formData.capacidades_sistema.trim()) newErrors.capacidades_sistema = 'Este campo es requerido'
+        if (!formData.manejo_datos.trim()) newErrors.manejo_datos = 'Este campo es requerido'
         break
       case 5:
-        if (!formData.data_handling_practices.trim()) newErrors.data_handling_practices = 'Required'
-        if (!formData.incident_response_plan.trim()) newErrors.incident_response_plan = 'Required'
-        break
-      case 6:
-        if (!formData.art5_principles_accepted) newErrors.art5_principles_accepted = 'Must accept'
-        if (!formData.audit_summary_consent) newErrors.audit_summary_consent = 'Must accept'
-        if (!formData.change_notification_commitment) newErrors.change_notification_commitment = 'Must accept'
+        if (!formData.acepta_principios_eticos) newErrors.acepta_principios_eticos = 'Debe aceptar los principios eticos'
+        if (!formData.acepta_auditoria) newErrors.acepta_auditoria = 'Debe aceptar la auditoria'
+        if (!formData.acepta_notificacion_cambios) newErrors.acepta_notificacion_cambios = 'Debe aceptar notificar cambios'
         break
     }
 
@@ -166,25 +206,49 @@ export default function AISystemRegistrationForm() {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleNext = () => {
-    if (validateStep(currentStep)) {
-      setCurrentStep((prev) => Math.min(prev + 1, 6))
+  const handleSiguiente = () => {
+    if (validarPaso(pasoActual)) {
+      setPasoActual((prev) => Math.min(prev + 1, 5))
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }
 
-  const handlePrev = () => {
-    setCurrentStep((prev) => Math.max(prev - 1, 1))
+  const handleAnterior = () => {
+    setPasoActual((prev) => Math.max(prev - 1, 1))
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const handleSubmit = async () => {
-    if (!validateStep(6)) return
+    if (!validarPaso(5)) return
 
     setLoading(true)
     try {
       const response = await fetch('/api/registrations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          deployer_name: formData.nombre_entidad,
+          nit: formData.nit,
+          contact_email: formData.email_contacto,
+          developer_name: formData.nombre_desarrollador,
+          system_name: formData.nombre_sistema,
+          system_version: formData.version,
+          purpose_description: formData.descripcion_proposito,
+          sector: formData.sector,
+          geographic_scope: formData.alcance_geografico,
+          risk_tier: formData.nivel_riesgo,
+          tier_justification: formData.justificacion_riesgo,
+          compliance_pathway: formData.via_cumplimiento,
+          hitl_safeguards: formData.salvaguardas_humanas,
+          right_to_challenge: formData.mecanismo_impugnacion,
+          capabilities_description: formData.capacidades_sistema,
+          performance_metrics: formData.metricas_rendimiento,
+          data_handling_practices: formData.manejo_datos,
+          incident_response_plan: formData.plan_incidentes,
+          art5_principles_accepted: formData.acepta_principios_eticos,
+          audit_summary_consent: formData.acepta_auditoria,
+          change_notification_commitment: formData.acepta_notificacion_cambios,
+        }),
       })
 
       const data = await response.json()
@@ -192,39 +256,50 @@ export default function AISystemRegistrationForm() {
       if (response.ok) {
         setRegistryId(data.registry_id)
       } else {
-        alert(data.error || 'Failed to submit registration')
+        alert(data.error || 'Error al enviar el registro')
       }
     } catch {
-      alert('An error occurred. Please try again.')
+      alert('Ocurrio un error. Por favor intente de nuevo.')
     } finally {
       setLoading(false)
     }
   }
 
+  // Pantalla de exito
   if (registryId) {
     return (
-      <Card className="mx-auto max-w-2xl">
+      <Card className="mx-auto max-w-2xl border-0 shadow-lg">
         <CardContent className="flex flex-col items-center gap-6 py-12">
-          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-green-100">
-            <CheckCircle2 className="h-10 w-10 text-green-600" />
+          <div className="flex h-24 w-24 items-center justify-center rounded-full bg-emerald-100">
+            <CheckCircle2 className="h-12 w-12 text-emerald-600" />
           </div>
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-foreground">Registration Submitted!</h2>
+            <h2 className="text-2xl font-bold text-foreground">Registro Exitoso</h2>
             <p className="mt-2 text-muted-foreground">
-              Your AI system has been registered successfully.
+              Su sistema de IA ha sido registrado correctamente en el Registro Nacional.
             </p>
           </div>
-          <div className="rounded-lg border bg-muted/50 px-8 py-4 text-center">
-            <p className="text-sm text-muted-foreground">Your Registry ID</p>
-            <p className="mt-1 font-mono text-2xl font-bold text-primary">{registryId}</p>
+          <div className="w-full max-w-sm rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 px-8 py-6 text-center">
+            <p className="text-sm font-medium text-muted-foreground">Su Numero de Registro</p>
+            <p className="mt-2 font-mono text-3xl font-bold text-primary">{registryId}</p>
           </div>
-          <p className="max-w-md text-center text-sm text-muted-foreground">
-            Please save this ID for your records. You will receive a confirmation email at{' '}
-            <span className="font-medium">{formData.contact_email}</span> with further instructions.
-          </p>
-          <Button onClick={() => window.location.href = '/'} variant="outline">
-            Return to Home
-          </Button>
+          <div className="max-w-md space-y-2 text-center text-sm text-muted-foreground">
+            <p>
+              Guarde este numero para futuras referencias. Recibira un correo de confirmacion en{' '}
+              <span className="font-medium text-foreground">{formData.email_contacto}</span>
+            </p>
+            <p>
+              La ANIA revisara su solicitud y le notificara el estado de su registro.
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <Button onClick={() => window.print()} variant="outline">
+              Imprimir Comprobante
+            </Button>
+            <Button onClick={() => window.location.href = '/'}>
+              Volver al Inicio
+            </Button>
+          </div>
         </CardContent>
       </Card>
     )
@@ -232,166 +307,250 @@ export default function AISystemRegistrationForm() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-8">
-      {/* Progress Steps */}
-      <nav aria-label="Progress">
+      {/* Indicador de Progreso */}
+      <nav aria-label="Progreso del formulario" className="hidden sm:block">
         <ol className="flex items-center justify-between">
-          {STEPS.map((step, index) => (
-            <li key={step.id} className="flex flex-1 items-center">
-              <div className="flex flex-col items-center gap-2">
-                <div
-                  className={cn(
-                    'flex h-10 w-10 items-center justify-center rounded-full border-2 text-sm font-medium transition-colors',
-                    currentStep > step.id
-                      ? 'border-primary bg-primary text-primary-foreground'
-                      : currentStep === step.id
-                        ? 'border-primary bg-background text-primary'
-                        : 'border-muted bg-background text-muted-foreground'
-                  )}
+          {PASOS.map((paso, index) => {
+            const Icon = paso.icon
+            return (
+              <li key={paso.id} className="flex flex-1 items-center">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (paso.id < pasoActual) setPasoActual(paso.id)
+                  }}
+                  disabled={paso.id > pasoActual}
+                  className="flex flex-col items-center gap-2 disabled:cursor-not-allowed"
                 >
-                  {currentStep > step.id ? (
-                    <CheckCircle2 className="h-5 w-5" />
-                  ) : (
-                    step.id
-                  )}
-                </div>
-                <div className="hidden text-center sm:block">
-                  <p className={cn(
-                    'text-xs font-medium',
-                    currentStep >= step.id ? 'text-foreground' : 'text-muted-foreground'
-                  )}>
-                    {step.title}
-                  </p>
-                </div>
-              </div>
-              {index < STEPS.length - 1 && (
-                <div
-                  className={cn(
-                    'mx-2 h-0.5 flex-1',
-                    currentStep > step.id ? 'bg-primary' : 'bg-muted'
-                  )}
-                />
-              )}
-            </li>
-          ))}
+                  <div
+                    className={cn(
+                      'flex h-12 w-12 items-center justify-center rounded-full border-2 transition-all',
+                      pasoActual > paso.id
+                        ? 'border-emerald-500 bg-emerald-500 text-white'
+                        : pasoActual === paso.id
+                          ? 'border-primary bg-primary text-primary-foreground shadow-lg shadow-primary/25'
+                          : 'border-muted bg-muted/50 text-muted-foreground'
+                    )}
+                  >
+                    {pasoActual > paso.id ? (
+                      <CheckCircle2 className="h-6 w-6" />
+                    ) : (
+                      <Icon className="h-5 w-5" />
+                    )}
+                  </div>
+                  <div className="text-center">
+                    <p className={cn(
+                      'text-sm font-medium',
+                      pasoActual >= paso.id ? 'text-foreground' : 'text-muted-foreground'
+                    )}>
+                      {paso.titulo}
+                    </p>
+                  </div>
+                </button>
+                {index < PASOS.length - 1 && (
+                  <div
+                    className={cn(
+                      'mx-4 h-1 flex-1 rounded-full transition-colors',
+                      pasoActual > paso.id ? 'bg-emerald-500' : 'bg-muted'
+                    )}
+                  />
+                )}
+              </li>
+            )
+          })}
         </ol>
       </nav>
 
-      {/* Form Card */}
-      <Card>
-        <CardHeader>
-          <CardTitle>{STEPS[currentStep - 1].title}</CardTitle>
-          <CardDescription>{STEPS[currentStep - 1].description}</CardDescription>
+      {/* Indicador movil */}
+      <div className="flex items-center justify-between sm:hidden">
+        <span className="text-sm text-muted-foreground">
+          Paso {pasoActual} de {PASOS.length}
+        </span>
+        <span className="font-medium">{PASOS[pasoActual - 1].titulo}</span>
+      </div>
+
+      {/* Formulario */}
+      <Card className="border-0 shadow-lg">
+        <CardHeader className="border-b bg-muted/30 pb-6">
+          <div className="flex items-center gap-3">
+            {(() => {
+              const Icon = PASOS[pasoActual - 1].icon
+              return <Icon className="h-6 w-6 text-primary" />
+            })()}
+            <div>
+              <CardTitle className="text-xl">{PASOS[pasoActual - 1].titulo}</CardTitle>
+              <CardDescription>{PASOS[pasoActual - 1].descripcion}</CardDescription>
+            </div>
+          </div>
         </CardHeader>
-        <CardContent className="space-y-6">
-          {/* Step 1: Entity Info */}
-          {currentStep === 1 && (
+        <CardContent className="space-y-6 p-6">
+          {/* Paso 1: Informacion de la Entidad */}
+          {pasoActual === 1 && (
             <>
-              <div className="space-y-2">
-                <Label htmlFor="deployer_name">
-                  Deployer Name <span className="text-destructive">*</span>
-                </Label>
-                <Input
-                  id="deployer_name"
-                  placeholder="Organization or company name"
-                  value={formData.deployer_name}
-                  onChange={(e) => updateField('deployer_name', e.target.value)}
-                  className={errors.deployer_name ? 'border-destructive' : ''}
-                />
-                {errors.deployer_name && (
-                  <p className="text-sm text-destructive">{errors.deployer_name}</p>
-                )}
+              <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
+                <div className="flex gap-3">
+                  <HelpCircle className="h-5 w-5 shrink-0 text-blue-600" />
+                  <p className="text-sm text-blue-800">
+                    Ingrese la informacion de la organizacion o persona que opera el sistema de IA. 
+                    Esta informacion sera utilizada por la ANIA para el registro oficial.
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid gap-6 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="nombre_entidad">
+                    Nombre de la Entidad <span className="text-destructive">*</span>
+                  </Label>
+                  <Input
+                    id="nombre_entidad"
+                    placeholder="Ej: Mi Empresa S.A. de C.V."
+                    value={formData.nombre_entidad}
+                    onChange={(e) => updateField('nombre_entidad', e.target.value)}
+                    className={cn(
+                      'h-11',
+                      errors.nombre_entidad && 'border-destructive focus-visible:ring-destructive'
+                    )}
+                  />
+                  {errors.nombre_entidad && (
+                    <p className="text-sm text-destructive">{errors.nombre_entidad}</p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="nit">
+                    NIT <span className="text-destructive">*</span>
+                  </Label>
+                  <Input
+                    id="nit"
+                    placeholder="Ej: 0614-123456-101-0"
+                    value={formData.nit}
+                    onChange={(e) => updateField('nit', e.target.value)}
+                    className={cn(
+                      'h-11',
+                      errors.nit && 'border-destructive focus-visible:ring-destructive'
+                    )}
+                  />
+                  {errors.nit && <p className="text-sm text-destructive">{errors.nit}</p>}
+                </div>
+              </div>
+
+              <div className="grid gap-6 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="email_contacto">
+                    Correo Electronico <span className="text-destructive">*</span>
+                  </Label>
+                  <Input
+                    id="email_contacto"
+                    type="email"
+                    placeholder="contacto@empresa.com"
+                    value={formData.email_contacto}
+                    onChange={(e) => updateField('email_contacto', e.target.value)}
+                    className={cn(
+                      'h-11',
+                      errors.email_contacto && 'border-destructive focus-visible:ring-destructive'
+                    )}
+                  />
+                  {errors.email_contacto && (
+                    <p className="text-sm text-destructive">{errors.email_contacto}</p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="telefono">Telefono (Opcional)</Label>
+                  <Input
+                    id="telefono"
+                    placeholder="Ej: 2222-3333"
+                    value={formData.telefono}
+                    onChange={(e) => updateField('telefono', e.target.value)}
+                    className="h-11"
+                  />
+                </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="nit">
-                  NIT (Tax ID) <span className="text-destructive">*</span>
+                <Label htmlFor="nombre_desarrollador">
+                  Nombre del Desarrollador (Si es diferente al operador)
                 </Label>
                 <Input
-                  id="nit"
-                  placeholder="e.g., 0614-123456-101-0"
-                  value={formData.nit}
-                  onChange={(e) => updateField('nit', e.target.value)}
-                  className={errors.nit ? 'border-destructive' : ''}
+                  id="nombre_desarrollador"
+                  placeholder="Ej: Empresa Desarrolladora de IA"
+                  value={formData.nombre_desarrollador}
+                  onChange={(e) => updateField('nombre_desarrollador', e.target.value)}
+                  className="h-11"
                 />
-                {errors.nit && <p className="text-sm text-destructive">{errors.nit}</p>}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="contact_email">
-                  Contact Email <span className="text-destructive">*</span>
-                </Label>
-                <Input
-                  id="contact_email"
-                  type="email"
-                  placeholder="contact@company.com"
-                  value={formData.contact_email}
-                  onChange={(e) => updateField('contact_email', e.target.value)}
-                  className={errors.contact_email ? 'border-destructive' : ''}
-                />
-                {errors.contact_email && (
-                  <p className="text-sm text-destructive">{errors.contact_email}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="developer_name">Developer Name (Optional)</Label>
-                <Input
-                  id="developer_name"
-                  placeholder="Third-party developer, if applicable"
-                  value={formData.developer_name}
-                  onChange={(e) => updateField('developer_name', e.target.value)}
-                />
+                <p className="text-xs text-muted-foreground">
+                  Complete solo si el desarrollador del sistema es diferente a quien lo opera.
+                </p>
               </div>
             </>
           )}
 
-          {/* Step 2: System Overview */}
-          {currentStep === 2 && (
+          {/* Paso 2: Informacion del Sistema IA */}
+          {pasoActual === 2 && (
             <>
-              <div className="space-y-2">
-                <Label htmlFor="system_name">
-                  System Name <span className="text-destructive">*</span>
-                </Label>
-                <Input
-                  id="system_name"
-                  placeholder="Name of your AI system"
-                  value={formData.system_name}
-                  onChange={(e) => updateField('system_name', e.target.value)}
-                  className={errors.system_name ? 'border-destructive' : ''}
-                />
-                {errors.system_name && (
-                  <p className="text-sm text-destructive">{errors.system_name}</p>
-                )}
+              <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
+                <div className="flex gap-3">
+                  <HelpCircle className="h-5 w-5 shrink-0 text-blue-600" />
+                  <p className="text-sm text-blue-800">
+                    Describa el sistema de Inteligencia Artificial que desea registrar. 
+                    Proporcione informacion clara sobre su proposito y ambito de aplicacion.
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid gap-6 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="nombre_sistema">
+                    Nombre del Sistema <span className="text-destructive">*</span>
+                  </Label>
+                  <Input
+                    id="nombre_sistema"
+                    placeholder="Ej: AsistenteIA Pro"
+                    value={formData.nombre_sistema}
+                    onChange={(e) => updateField('nombre_sistema', e.target.value)}
+                    className={cn(
+                      'h-11',
+                      errors.nombre_sistema && 'border-destructive focus-visible:ring-destructive'
+                    )}
+                  />
+                  {errors.nombre_sistema && (
+                    <p className="text-sm text-destructive">{errors.nombre_sistema}</p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="version">Version (Opcional)</Label>
+                  <Input
+                    id="version"
+                    placeholder="Ej: 1.0.0"
+                    value={formData.version}
+                    onChange={(e) => updateField('version', e.target.value)}
+                    className="h-11"
+                  />
+                </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="system_version">Version (Optional)</Label>
-                <Input
-                  id="system_version"
-                  placeholder="e.g., 1.0.0, v2.3"
-                  value={formData.system_version}
-                  onChange={(e) => updateField('system_version', e.target.value)}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="purpose_description">
-                  Purpose / Description <span className="text-destructive">*</span>
+                <Label htmlFor="descripcion_proposito">
+                  Descripcion y Proposito <span className="text-destructive">*</span>
                 </Label>
                 <Textarea
-                  id="purpose_description"
-                  placeholder="Describe the purpose and main functionality of your AI system..."
+                  id="descripcion_proposito"
+                  placeholder="Describa que hace su sistema de IA, para que se utiliza y como funciona..."
                   rows={4}
-                  value={formData.purpose_description}
-                  onChange={(e) => updateField('purpose_description', e.target.value)}
-                  className={errors.purpose_description ? 'border-destructive' : ''}
+                  value={formData.descripcion_proposito}
+                  onChange={(e) => updateField('descripcion_proposito', e.target.value)}
+                  className={cn(
+                    errors.descripcion_proposito && 'border-destructive focus-visible:ring-destructive'
+                  )}
                 />
-                {errors.purpose_description && (
-                  <p className="text-sm text-destructive">{errors.purpose_description}</p>
+                {errors.descripcion_proposito && (
+                  <p className="text-sm text-destructive">{errors.descripcion_proposito}</p>
                 )}
               </div>
 
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className="grid gap-6 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="sector">
                     Sector <span className="text-destructive">*</span>
@@ -400,13 +559,18 @@ export default function AISystemRegistrationForm() {
                     value={formData.sector}
                     onValueChange={(value) => updateField('sector', value)}
                   >
-                    <SelectTrigger className={errors.sector ? 'border-destructive' : ''}>
-                      <SelectValue placeholder="Select sector" />
+                    <SelectTrigger 
+                      className={cn(
+                        'h-11',
+                        errors.sector && 'border-destructive focus:ring-destructive'
+                      )}
+                    >
+                      <SelectValue placeholder="Seleccione el sector" />
                     </SelectTrigger>
                     <SelectContent>
-                      {SECTORS.map((sector) => (
-                        <SelectItem key={sector} value={sector}>
-                          {sector}
+                      {SECTORES.map((sector) => (
+                        <SelectItem key={sector.value} value={sector.value}>
+                          {sector.label}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -415,143 +579,193 @@ export default function AISystemRegistrationForm() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="geographic_scope">
-                    Geographic Scope <span className="text-destructive">*</span>
+                  <Label htmlFor="alcance_geografico">
+                    Alcance Geografico <span className="text-destructive">*</span>
                   </Label>
                   <Select
-                    value={formData.geographic_scope}
-                    onValueChange={(value) => updateField('geographic_scope', value)}
+                    value={formData.alcance_geografico}
+                    onValueChange={(value) => updateField('alcance_geografico', value)}
                   >
-                    <SelectTrigger className={errors.geographic_scope ? 'border-destructive' : ''}>
-                      <SelectValue placeholder="Select scope" />
+                    <SelectTrigger 
+                      className={cn(
+                        'h-11',
+                        errors.alcance_geografico && 'border-destructive focus:ring-destructive'
+                      )}
+                    >
+                      <SelectValue placeholder="Seleccione el alcance" />
                     </SelectTrigger>
                     <SelectContent>
-                      {GEOGRAPHIC_SCOPES.map((scope) => (
-                        <SelectItem key={scope} value={scope}>
-                          {scope}
+                      {ALCANCE_GEOGRAFICO.map((alcance) => (
+                        <SelectItem key={alcance.value} value={alcance.value}>
+                          {alcance.label}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                  {errors.geographic_scope && (
-                    <p className="text-sm text-destructive">{errors.geographic_scope}</p>
+                  {errors.alcance_geografico && (
+                    <p className="text-sm text-destructive">{errors.alcance_geografico}</p>
                   )}
                 </div>
               </div>
             </>
           )}
 
-          {/* Step 3: Risk & Compliance */}
-          {currentStep === 3 && (
+          {/* Paso 3: Clasificacion de Riesgo */}
+          {pasoActual === 3 && (
             <>
+              <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
+                <div className="flex gap-3">
+                  <HelpCircle className="h-5 w-5 shrink-0 text-blue-600" />
+                  <p className="text-sm text-blue-800">
+                    Clasifique el nivel de riesgo de su sistema segun el impacto potencial en las personas.
+                    La ANIA podra revisar y ajustar esta clasificacion.
+                  </p>
+                </div>
+              </div>
+
               <div className="space-y-4">
                 <Label>
-                  Risk Tier <span className="text-destructive">*</span>
+                  Nivel de Riesgo <span className="text-destructive">*</span>
                 </Label>
                 <div className="grid gap-3 sm:grid-cols-2">
                   {[
-                    { value: 'LOW', label: 'Low Risk', desc: 'Minimal impact on individuals' },
-                    { value: 'MEDIUM', label: 'Medium Risk', desc: 'Moderate impact, standard oversight' },
-                    { value: 'HIGH', label: 'High Risk', desc: 'Significant impact, enhanced requirements' },
-                    { value: 'SANDBOX', label: 'Sandbox', desc: 'Experimental/testing environment' },
+                    { 
+                      value: 'BAJO', 
+                      label: 'Riesgo Bajo', 
+                      desc: 'Impacto minimo en personas',
+                      color: 'border-emerald-200 bg-emerald-50 hover:border-emerald-400',
+                      activeColor: 'border-emerald-500 bg-emerald-100 ring-2 ring-emerald-500/20'
+                    },
+                    { 
+                      value: 'MEDIO', 
+                      label: 'Riesgo Medio', 
+                      desc: 'Impacto moderado, supervision estandar',
+                      color: 'border-amber-200 bg-amber-50 hover:border-amber-400',
+                      activeColor: 'border-amber-500 bg-amber-100 ring-2 ring-amber-500/20'
+                    },
+                    { 
+                      value: 'ALTO', 
+                      label: 'Riesgo Alto', 
+                      desc: 'Impacto significativo, requisitos adicionales',
+                      color: 'border-red-200 bg-red-50 hover:border-red-400',
+                      activeColor: 'border-red-500 bg-red-100 ring-2 ring-red-500/20'
+                    },
+                    { 
+                      value: 'SANDBOX', 
+                      label: 'Sandbox ANIA', 
+                      desc: 'Ambiente de pruebas controlado',
+                      color: 'border-violet-200 bg-violet-50 hover:border-violet-400',
+                      activeColor: 'border-violet-500 bg-violet-100 ring-2 ring-violet-500/20'
+                    },
                   ].map((tier) => (
                     <button
                       key={tier.value}
                       type="button"
-                      onClick={() => updateField('risk_tier', tier.value)}
+                      onClick={() => updateField('nivel_riesgo', tier.value)}
                       className={cn(
-                        'flex flex-col items-start rounded-lg border p-4 text-left transition-colors',
-                        formData.risk_tier === tier.value
-                          ? 'border-primary bg-primary/5'
-                          : 'border-border hover:border-primary/50',
-                        errors.risk_tier && !formData.risk_tier ? 'border-destructive' : ''
+                        'flex flex-col items-start rounded-xl border-2 p-4 text-left transition-all',
+                        formData.nivel_riesgo === tier.value ? tier.activeColor : tier.color,
+                        errors.nivel_riesgo && !formData.nivel_riesgo && 'border-destructive'
                       )}
                     >
-                      <span className="font-medium">{tier.label}</span>
+                      <span className="font-semibold">{tier.label}</span>
                       <span className="text-sm text-muted-foreground">{tier.desc}</span>
                     </button>
                   ))}
                 </div>
-                {errors.risk_tier && <p className="text-sm text-destructive">{errors.risk_tier}</p>}
+                {errors.nivel_riesgo && <p className="text-sm text-destructive">{errors.nivel_riesgo}</p>}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="tier_justification">
-                  Tier Justification <span className="text-destructive">*</span>
+                <Label htmlFor="justificacion_riesgo">
+                  Justificacion del Nivel de Riesgo <span className="text-destructive">*</span>
                 </Label>
                 <Textarea
-                  id="tier_justification"
-                  placeholder="Explain why this risk tier is appropriate for your system..."
+                  id="justificacion_riesgo"
+                  placeholder="Explique por que considera que su sistema tiene este nivel de riesgo..."
                   rows={3}
-                  value={formData.tier_justification}
-                  onChange={(e) => updateField('tier_justification', e.target.value)}
-                  className={errors.tier_justification ? 'border-destructive' : ''}
+                  value={formData.justificacion_riesgo}
+                  onChange={(e) => updateField('justificacion_riesgo', e.target.value)}
+                  className={cn(
+                    errors.justificacion_riesgo && 'border-destructive focus-visible:ring-destructive'
+                  )}
                 />
-                {errors.tier_justification && (
-                  <p className="text-sm text-destructive">{errors.tier_justification}</p>
+                {errors.justificacion_riesgo && (
+                  <p className="text-sm text-destructive">{errors.justificacion_riesgo}</p>
                 )}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="compliance_pathway">
-                  Compliance Pathway <span className="text-destructive">*</span>
+                <Label htmlFor="via_cumplimiento">
+                  Via de Cumplimiento <span className="text-destructive">*</span>
                 </Label>
                 <Select
-                  value={formData.compliance_pathway}
-                  onValueChange={(value) => updateField('compliance_pathway', value)}
+                  value={formData.via_cumplimiento}
+                  onValueChange={(value) => updateField('via_cumplimiento', value)}
                 >
-                  <SelectTrigger className={errors.compliance_pathway ? 'border-destructive' : ''}>
-                    <SelectValue placeholder="Select pathway" />
+                  <SelectTrigger 
+                    className={cn(
+                      'h-11',
+                      errors.via_cumplimiento && 'border-destructive focus:ring-destructive'
+                    )}
+                  >
+                    <SelectValue placeholder="Seleccione la via de cumplimiento" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="self-certification">Self-Certification</SelectItem>
-                    <SelectItem value="third-party-audit">Third-Party Audit</SelectItem>
-                    <SelectItem value="ania-sandbox">ANIA Sandbox</SelectItem>
+                    <SelectItem value="autocertificacion">Autocertificacion</SelectItem>
+                    <SelectItem value="auditoria-tercero">Auditoria por Tercero</SelectItem>
+                    <SelectItem value="sandbox-ania">Sandbox ANIA</SelectItem>
                   </SelectContent>
                 </Select>
-                {errors.compliance_pathway && (
-                  <p className="text-sm text-destructive">{errors.compliance_pathway}</p>
+                {errors.via_cumplimiento && (
+                  <p className="text-sm text-destructive">{errors.via_cumplimiento}</p>
                 )}
               </div>
 
-              {/* Conditional fields for HIGH risk */}
-              {formData.risk_tier === 'HIGH' && (
-                <div className="space-y-4 rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-900 dark:bg-amber-950/30">
-                  <p className="text-sm font-medium text-amber-800 dark:text-amber-200">
-                    Additional requirements for High Risk systems
+              {/* Campos adicionales para Riesgo Alto */}
+              {formData.nivel_riesgo === 'ALTO' && (
+                <div className="space-y-6 rounded-lg border border-red-200 bg-red-50/50 p-4">
+                  <p className="text-sm font-medium text-red-800">
+                    Campos adicionales requeridos para sistemas de Alto Riesgo:
                   </p>
-
+                  
                   <div className="space-y-2">
-                    <Label htmlFor="hitl_safeguards">
-                      Human-in-the-Loop (HITL) Safeguards <span className="text-destructive">*</span>
+                    <Label htmlFor="salvaguardas_humanas">
+                      Salvaguardas de Supervision Humana <span className="text-destructive">*</span>
                     </Label>
                     <Textarea
-                      id="hitl_safeguards"
-                      placeholder="Describe the human oversight mechanisms in place..."
+                      id="salvaguardas_humanas"
+                      placeholder="Describa como se garantiza la supervision humana en las decisiones del sistema..."
                       rows={3}
-                      value={formData.hitl_safeguards}
-                      onChange={(e) => updateField('hitl_safeguards', e.target.value)}
-                      className={errors.hitl_safeguards ? 'border-destructive' : ''}
+                      value={formData.salvaguardas_humanas}
+                      onChange={(e) => updateField('salvaguardas_humanas', e.target.value)}
+                      className={cn(
+                        'bg-white',
+                        errors.salvaguardas_humanas && 'border-destructive focus-visible:ring-destructive'
+                      )}
                     />
-                    {errors.hitl_safeguards && (
-                      <p className="text-sm text-destructive">{errors.hitl_safeguards}</p>
+                    {errors.salvaguardas_humanas && (
+                      <p className="text-sm text-destructive">{errors.salvaguardas_humanas}</p>
                     )}
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="right_to_challenge">
-                      Right to Challenge Mechanism <span className="text-destructive">*</span>
+                    <Label htmlFor="mecanismo_impugnacion">
+                      Mecanismo de Impugnacion <span className="text-destructive">*</span>
                     </Label>
                     <Textarea
-                      id="right_to_challenge"
-                      placeholder="Describe how individuals can challenge AI decisions..."
+                      id="mecanismo_impugnacion"
+                      placeholder="Describa como pueden los usuarios impugnar o apelar las decisiones del sistema..."
                       rows={3}
-                      value={formData.right_to_challenge}
-                      onChange={(e) => updateField('right_to_challenge', e.target.value)}
-                      className={errors.right_to_challenge ? 'border-destructive' : ''}
+                      value={formData.mecanismo_impugnacion}
+                      onChange={(e) => updateField('mecanismo_impugnacion', e.target.value)}
+                      className={cn(
+                        'bg-white',
+                        errors.mecanismo_impugnacion && 'border-destructive focus-visible:ring-destructive'
+                      )}
                     />
-                    {errors.right_to_challenge && (
-                      <p className="text-sm text-destructive">{errors.right_to_challenge}</p>
+                    {errors.mecanismo_impugnacion && (
+                      <p className="text-sm text-destructive">{errors.mecanismo_impugnacion}</p>
                     )}
                   </div>
                 </div>
@@ -559,195 +773,245 @@ export default function AISystemRegistrationForm() {
             </>
           )}
 
-          {/* Step 4: Technical */}
-          {currentStep === 4 && (
+          {/* Paso 4: Especificaciones Tecnicas y Datos */}
+          {pasoActual === 4 && (
             <>
+              <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
+                <div className="flex gap-3">
+                  <HelpCircle className="h-5 w-5 shrink-0 text-blue-600" />
+                  <p className="text-sm text-blue-800">
+                    Proporcione informacion tecnica sobre las capacidades del sistema y 
+                    como maneja los datos. No necesita incluir detalles confidenciales.
+                  </p>
+                </div>
+              </div>
+
               <div className="space-y-2">
-                <Label htmlFor="capabilities_description">
-                  Capabilities / Inputs / Outputs <span className="text-destructive">*</span>
+                <Label htmlFor="capacidades_sistema">
+                  Capacidades del Sistema <span className="text-destructive">*</span>
                 </Label>
                 <Textarea
-                  id="capabilities_description"
-                  placeholder="Describe what the system does, what data it takes as input, and what outputs it produces..."
-                  rows={5}
-                  value={formData.capabilities_description}
-                  onChange={(e) => updateField('capabilities_description', e.target.value)}
-                  className={errors.capabilities_description ? 'border-destructive' : ''}
+                  id="capacidades_sistema"
+                  placeholder="Describa que puede hacer su sistema (entradas, salidas, funciones principales)..."
+                  rows={4}
+                  value={formData.capacidades_sistema}
+                  onChange={(e) => updateField('capacidades_sistema', e.target.value)}
+                  className={cn(
+                    errors.capacidades_sistema && 'border-destructive focus-visible:ring-destructive'
+                  )}
                 />
-                {errors.capabilities_description && (
-                  <p className="text-sm text-destructive">{errors.capabilities_description}</p>
+                {errors.capacidades_sistema && (
+                  <p className="text-sm text-destructive">{errors.capacidades_sistema}</p>
                 )}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="performance_metrics">
-                  Performance / Fairness Metrics (Optional)
+                <Label htmlFor="metricas_rendimiento">
+                  Metricas de Rendimiento (Opcional)
                 </Label>
                 <Textarea
-                  id="performance_metrics"
-                  placeholder="Describe any performance benchmarks, accuracy metrics, or fairness evaluations..."
-                  rows={4}
-                  value={formData.performance_metrics}
-                  onChange={(e) => updateField('performance_metrics', e.target.value)}
+                  id="metricas_rendimiento"
+                  placeholder="Si tiene metricas de precision, equidad u otras, incluyalas aqui..."
+                  rows={3}
+                  value={formData.metricas_rendimiento}
+                  onChange={(e) => updateField('metricas_rendimiento', e.target.value)}
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="manejo_datos">
+                  Manejo de Datos <span className="text-destructive">*</span>
+                </Label>
+                <Textarea
+                  id="manejo_datos"
+                  placeholder="Describa que tipo de datos utiliza el sistema y como los protege..."
+                  rows={4}
+                  value={formData.manejo_datos}
+                  onChange={(e) => updateField('manejo_datos', e.target.value)}
+                  className={cn(
+                    errors.manejo_datos && 'border-destructive focus-visible:ring-destructive'
+                  )}
+                />
+                {errors.manejo_datos && (
+                  <p className="text-sm text-destructive">{errors.manejo_datos}</p>
+                )}
                 <p className="text-xs text-muted-foreground">
-                  Include metrics such as accuracy rates, bias assessments, or fairness evaluations if available.
+                  Conforme a la Ley de Proteccion de Datos Personales de El Salvador.
                 </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="plan_incidentes">
+                  Plan de Respuesta a Incidentes (Opcional)
+                </Label>
+                <Textarea
+                  id="plan_incidentes"
+                  placeholder="Si tiene un plan para manejar incidentes o fallas del sistema, describalo brevemente..."
+                  rows={3}
+                  value={formData.plan_incidentes}
+                  onChange={(e) => updateField('plan_incidentes', e.target.value)}
+                />
               </div>
             </>
           )}
 
-          {/* Step 5: Operational & Safety */}
-          {currentStep === 5 && (
+          {/* Paso 5: Declaraciones y Consentimiento */}
+          {pasoActual === 5 && (
             <>
-              <div className="space-y-2">
-                <Label htmlFor="data_handling_practices">
-                  Data Handling Practices <span className="text-destructive">*</span>
-                </Label>
-                <Textarea
-                  id="data_handling_practices"
-                  placeholder="Describe how data is collected, processed, stored, and protected..."
-                  rows={4}
-                  value={formData.data_handling_practices}
-                  onChange={(e) => updateField('data_handling_practices', e.target.value)}
-                  className={errors.data_handling_practices ? 'border-destructive' : ''}
-                />
-                {errors.data_handling_practices && (
-                  <p className="text-sm text-destructive">{errors.data_handling_practices}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="incident_response_plan">
-                  Incident Response Plan Summary <span className="text-destructive">*</span>
-                </Label>
-                <Textarea
-                  id="incident_response_plan"
-                  placeholder="Summarize your plan for handling AI system failures, errors, or security incidents..."
-                  rows={4}
-                  value={formData.incident_response_plan}
-                  onChange={(e) => updateField('incident_response_plan', e.target.value)}
-                  className={errors.incident_response_plan ? 'border-destructive' : ''}
-                />
-                {errors.incident_response_plan && (
-                  <p className="text-sm text-destructive">{errors.incident_response_plan}</p>
-                )}
-              </div>
-            </>
-          )}
-
-          {/* Step 6: Transparency & Consent */}
-          {currentStep === 6 && (
-            <div className="space-y-6">
-              <div className="rounded-lg border bg-muted/30 p-4">
-                <h3 className="font-medium">Required Commitments</h3>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Please review and accept the following commitments to complete your registration.
-                </p>
+              <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
+                <div className="flex gap-3">
+                  <HelpCircle className="h-5 w-5 shrink-0 text-blue-600" />
+                  <p className="text-sm text-blue-800">
+                    Para completar el registro, debe aceptar los siguientes compromisos 
+                    conforme a la Ley de Fomento a la Inteligencia Artificial (LFIAT).
+                  </p>
+                </div>
               </div>
 
               <div className="space-y-4">
-                <div className="flex items-start gap-3">
+                <div 
+                  className={cn(
+                    'flex items-start gap-4 rounded-lg border p-4 transition-colors',
+                    formData.acepta_principios_eticos ? 'border-emerald-200 bg-emerald-50' : 'border-border',
+                    errors.acepta_principios_eticos && !formData.acepta_principios_eticos && 'border-destructive'
+                  )}
+                >
                   <Checkbox
-                    id="art5_principles"
-                    checked={formData.art5_principles_accepted}
-                    onCheckedChange={(checked) =>
-                      updateField('art5_principles_accepted', checked === true)
-                    }
-                    className={errors.art5_principles_accepted ? 'border-destructive' : ''}
+                    id="acepta_principios_eticos"
+                    checked={formData.acepta_principios_eticos}
+                    onCheckedChange={(checked) => updateField('acepta_principios_eticos', checked === true)}
+                    className="mt-1"
                   />
                   <div className="space-y-1">
-                    <Label htmlFor="art5_principles" className="cursor-pointer font-medium">
-                      Art. 5 LFIAT Principles Compliance
+                    <Label htmlFor="acepta_principios_eticos" className="cursor-pointer font-medium">
+                      Principios de Uso Etico y Responsable
                     </Label>
                     <p className="text-sm text-muted-foreground">
-                      I confirm that this AI system complies with the principles established in
-                      Article 5 of the LFIAT, including transparency, accountability, and
-                      non-discrimination.
+                      Declaro que el sistema de IA sera utilizado de manera etica y responsable, 
+                      conforme a los principios establecidos en la LFIAT, respetando los derechos 
+                      fundamentales de las personas.
                     </p>
-                    {errors.art5_principles_accepted && (
-                      <p className="text-sm text-destructive">{errors.art5_principles_accepted}</p>
-                    )}
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3">
+                <div 
+                  className={cn(
+                    'flex items-start gap-4 rounded-lg border p-4 transition-colors',
+                    formData.acepta_auditoria ? 'border-emerald-200 bg-emerald-50' : 'border-border',
+                    errors.acepta_auditoria && !formData.acepta_auditoria && 'border-destructive'
+                  )}
+                >
                   <Checkbox
-                    id="audit_consent"
-                    checked={formData.audit_summary_consent}
-                    onCheckedChange={(checked) =>
-                      updateField('audit_summary_consent', checked === true)
-                    }
-                    className={errors.audit_summary_consent ? 'border-destructive' : ''}
+                    id="acepta_auditoria"
+                    checked={formData.acepta_auditoria}
+                    onCheckedChange={(checked) => updateField('acepta_auditoria', checked === true)}
+                    className="mt-1"
                   />
                   <div className="space-y-1">
-                    <Label htmlFor="audit_consent" className="cursor-pointer font-medium">
-                      Audit Summary Publication Consent
+                    <Label htmlFor="acepta_auditoria" className="cursor-pointer font-medium">
+                      Consentimiento de Auditoria
                     </Label>
                     <p className="text-sm text-muted-foreground">
-                      I consent to the publication of audit summaries and compliance reports as
-                      required by the regulatory framework.
+                      Acepto que la ANIA pueda solicitar informacion adicional o realizar 
+                      auditorias del sistema registrado para verificar el cumplimiento de 
+                      la normativa vigente.
                     </p>
-                    {errors.audit_summary_consent && (
-                      <p className="text-sm text-destructive">{errors.audit_summary_consent}</p>
-                    )}
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3">
+                <div 
+                  className={cn(
+                    'flex items-start gap-4 rounded-lg border p-4 transition-colors',
+                    formData.acepta_notificacion_cambios ? 'border-emerald-200 bg-emerald-50' : 'border-border',
+                    errors.acepta_notificacion_cambios && !formData.acepta_notificacion_cambios && 'border-destructive'
+                  )}
+                >
                   <Checkbox
-                    id="change_notification"
-                    checked={formData.change_notification_commitment}
-                    onCheckedChange={(checked) =>
-                      updateField('change_notification_commitment', checked === true)
-                    }
-                    className={errors.change_notification_commitment ? 'border-destructive' : ''}
+                    id="acepta_notificacion_cambios"
+                    checked={formData.acepta_notificacion_cambios}
+                    onCheckedChange={(checked) => updateField('acepta_notificacion_cambios', checked === true)}
+                    className="mt-1"
                   />
                   <div className="space-y-1">
-                    <Label htmlFor="change_notification" className="cursor-pointer font-medium">
-                      30-Day Change Notification Commitment
+                    <Label htmlFor="acepta_notificacion_cambios" className="cursor-pointer font-medium">
+                      Compromiso de Notificacion de Cambios
                     </Label>
                     <p className="text-sm text-muted-foreground">
-                      I commit to notifying the registry of any significant changes to the AI
-                      system within 30 days of implementation.
+                      Me comprometo a notificar a la ANIA cualquier cambio significativo 
+                      en el sistema dentro de los 30 dias siguientes a su implementacion.
                     </p>
-                    {errors.change_notification_commitment && (
-                      <p className="text-sm text-destructive">
-                        {errors.change_notification_commitment}
-                      </p>
-                    )}
                   </div>
                 </div>
               </div>
-            </div>
+
+              {(errors.acepta_principios_eticos || errors.acepta_auditoria || errors.acepta_notificacion_cambios) && (
+                <p className="text-sm text-destructive">
+                  Debe aceptar todas las declaraciones para continuar.
+                </p>
+              )}
+
+              {/* Resumen antes de enviar */}
+              <div className="rounded-lg border bg-muted/30 p-4">
+                <h4 className="font-medium">Resumen del Registro</h4>
+                <dl className="mt-3 grid gap-2 text-sm">
+                  <div className="flex justify-between">
+                    <dt className="text-muted-foreground">Entidad:</dt>
+                    <dd className="font-medium">{formData.nombre_entidad}</dd>
+                  </div>
+                  <div className="flex justify-between">
+                    <dt className="text-muted-foreground">Sistema:</dt>
+                    <dd className="font-medium">{formData.nombre_sistema}</dd>
+                  </div>
+                  <div className="flex justify-between">
+                    <dt className="text-muted-foreground">Sector:</dt>
+                    <dd className="font-medium">
+                      {SECTORES.find(s => s.value === formData.sector)?.label || '-'}
+                    </dd>
+                  </div>
+                  <div className="flex justify-between">
+                    <dt className="text-muted-foreground">Nivel de Riesgo:</dt>
+                    <dd className="font-medium">{formData.nivel_riesgo || '-'}</dd>
+                  </div>
+                </dl>
+              </div>
+            </>
           )}
 
-          {/* Navigation Buttons */}
-          <div className="flex justify-between pt-4">
+          {/* Botones de navegacion */}
+          <div className="flex items-center justify-between border-t pt-6">
             <Button
               type="button"
-              variant="outline"
-              onClick={handlePrev}
-              disabled={currentStep === 1}
+              variant="ghost"
+              onClick={handleAnterior}
+              disabled={pasoActual === 1}
+              className="gap-2"
             >
-              <ChevronLeft className="mr-2 h-4 w-4" />
-              Previous
+              <ChevronLeft className="h-4 w-4" />
+              Anterior
             </Button>
 
-            {currentStep < 6 ? (
-              <Button type="button" onClick={handleNext}>
-                Next
-                <ChevronRight className="ml-2 h-4 w-4" />
+            {pasoActual < 5 ? (
+              <Button type="button" onClick={handleSiguiente} className="gap-2">
+                Siguiente
+                <ChevronRight className="h-4 w-4" />
               </Button>
             ) : (
-              <Button type="button" onClick={handleSubmit} disabled={loading}>
+              <Button
+                type="button"
+                onClick={handleSubmit}
+                disabled={loading}
+                className="gap-2 bg-emerald-600 hover:bg-emerald-700"
+              >
                 {loading ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Submitting...
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Enviando...
                   </>
                 ) : (
-                  'Submit Registration'
+                  <>
+                    <CheckCircle2 className="h-4 w-4" />
+                    Enviar Registro
+                  </>
                 )}
               </Button>
             )}
