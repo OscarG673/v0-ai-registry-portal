@@ -170,7 +170,6 @@ export default function AISystemRegistrationForm() {
     switch (paso) {
       case 1:
         if (!formData.nombre_entidad.trim()) newErrors.nombre_entidad = 'Este campo es requerido'
-        if (!formData.nit.trim()) newErrors.nit = 'Este campo es requerido'
         if (!formData.email_contacto.trim()) {
           newErrors.email_contacto = 'Este campo es requerido'
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email_contacto)) {
@@ -419,9 +418,9 @@ export default function AISystemRegistrationForm() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="nit">
-                    NIT <span className="text-destructive">*</span>
-                  </Label>
+                <Label htmlFor="nit">
+                  NIT <span className="text-muted-foreground">(Opcional)</span>
+                </Label>
                   <Input
                     id="nit"
                     placeholder="Ej: 0614-123456-101-0"

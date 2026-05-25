@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Shield, FileText, Search, Building2, ArrowRight, CheckCircle2, ChevronRight, ExternalLink } from 'lucide-react'
+import { FileText, Search, Building2, ArrowRight, CheckCircle2, ChevronRight, ExternalLink } from 'lucide-react'
 
 export const metadata = {
   title: 'Portal de Registro de IA | ANIA El Salvador',
@@ -36,16 +36,11 @@ export default function Page() {
       <header className="bg-navy text-white">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
-            {/* Logo */}
-            <div className="flex items-center gap-4">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-white/30 bg-white/10">
-                <Shield className="h-8 w-8" />
-              </div>
-              <div className="text-center sm:text-left">
-                <p className="text-xs uppercase tracking-widest text-white/60">Agencia Nacional de</p>
-                <h1 className="text-2xl font-bold tracking-tight">Inteligencia Artificial</h1>
-                <p className="text-xs text-white/60">El Salvador</p>
-              </div>
+            {/* Title */}
+            <div className="text-center sm:text-left">
+              <p className="text-xs uppercase tracking-widest text-white/60">Agencia Nacional de</p>
+              <h1 className="text-2xl font-bold tracking-tight">Inteligencia Artificial</h1>
+              <p className="text-xs text-white/60">El Salvador</p>
             </div>
 
             {/* Search */}
@@ -341,14 +336,9 @@ export default function Page() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <div>
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-white/10">
-                  <Shield className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="font-bold">ANIA</p>
-                  <p className="text-xs text-white/60">El Salvador</p>
-                </div>
+              <div>
+                <p className="font-bold">ANIA</p>
+                <p className="text-xs text-white/60">El Salvador</p>
               </div>
               <p className="mt-4 text-sm text-white/60">
                 Agencia Nacional de Inteligencia Artificial de El Salvador.
