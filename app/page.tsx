@@ -227,7 +227,7 @@ export default function Page() {
             <Card className="relative border-0 bg-gradient-to-br from-white to-slate-50 shadow-lg">
               <CardHeader>
                 <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500 text-white">
-                  <Shield className="h-6 w-6" />
+                  <FileText className="h-6 w-6" />
                 </div>
                 <CardTitle className="text-lg">2. Clasificacion de Riesgo</CardTitle>
                 <CardDescription>
