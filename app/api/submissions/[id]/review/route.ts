@@ -5,7 +5,7 @@ import { sendApprovalNotification, sendRejectionNotification } from '@/lib/email
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const admin = await getAuthenticatedAdmin()
@@ -17,7 +17,8 @@ export async function POST(
     }
 
     const { action, reason } = await request.json()
-    const submissionId = parseInt(params.id)
+    const { id } = await params
+    const submissionId = parseInt(id)
 
     if (!submissionId || isNaN(submissionId)) {
       return NextResponse.json(

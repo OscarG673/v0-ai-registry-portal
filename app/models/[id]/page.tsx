@@ -26,16 +26,18 @@ async function getModel(id: string): Promise<AIModel | null> {
   }
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
-  const model = await getModel(params.id)
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const model = await getModel(id)
   return {
     title: model?.name ? `${model.name} - AI Model Registry` : 'Model Not Found',
     description: model?.description || 'AI Model',
   }
 }
 
-export default async function ModelPage({ params }: { params: { id: string } }) {
-  const model = await getModel(params.id)
+export default async function ModelPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const model = await getModel(id)
 
   if (!model) {
     return (
