@@ -20,11 +20,6 @@ import {
   ChevronLeft, 
   ChevronRight, 
   Loader2,
-  Building2,
-  Bot,
-  Shield,
-  Cpu,
-  FileCheck,
   HelpCircle,
   ExternalLink
 } from 'lucide-react'
@@ -118,35 +113,30 @@ const initialFormData: FormData = {
 }
 
 const PASOS = [
-  { 
-    id: 1, 
-    titulo: 'Entidad', 
+  {
+    id: 1,
+    titulo: 'Entidad',
     descripcion: 'Informacion de su organizacion',
-    icon: Building2 
   },
-  { 
-    id: 2, 
-    titulo: 'Sistema IA', 
+  {
+    id: 2,
+    titulo: 'Sistema IA',
     descripcion: 'Detalles del sistema',
-    icon: Bot 
   },
-  { 
-    id: 3, 
-    titulo: 'Riesgo', 
+  {
+    id: 3,
+    titulo: 'Riesgo',
     descripcion: 'Clasificacion y cumplimiento',
-    icon: Shield 
   },
-  { 
-    id: 4, 
-    titulo: 'Tecnico', 
+  {
+    id: 4,
+    titulo: 'Tecnico',
     descripcion: 'Capacidades del sistema',
-    icon: Cpu 
   },
-  { 
-    id: 5, 
-    titulo: 'Declaraciones', 
+  {
+    id: 5,
+    titulo: 'Declaraciones',
     descripcion: 'Consentimiento final',
-    icon: FileCheck 
   },
 ]
 
@@ -311,7 +301,6 @@ export default function AISystemRegistrationForm() {
       <nav aria-label="Progreso del formulario" className="hidden sm:block">
         <ol className="flex items-center justify-between">
           {PASOS.map((paso, index) => {
-            const Icon = paso.icon
             return (
               <li key={paso.id} className="flex flex-1 items-center">
                 <button
@@ -335,7 +324,7 @@ export default function AISystemRegistrationForm() {
                     {pasoActual > paso.id ? (
                       <CheckCircle2 className="h-6 w-6" />
                     ) : (
-                      <Icon className="h-5 w-5" />
+                      <span className="text-lg font-semibold">{paso.id}</span>
                     )}
                   </div>
                   <div className="text-center">
@@ -373,10 +362,9 @@ export default function AISystemRegistrationForm() {
       <Card className="border-0 shadow-lg">
         <CardHeader className="border-b bg-muted/30 pb-6">
           <div className="flex items-center gap-3">
-            {(() => {
-              const Icon = PASOS[pasoActual - 1].icon
-              return <Icon className="h-6 w-6 text-primary" />
-            })()}
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground">
+              <span className="text-lg font-semibold">{pasoActual}</span>
+            </div>
             <div>
               <CardTitle className="text-xl">{PASOS[pasoActual - 1].titulo}</CardTitle>
               <CardDescription>{PASOS[pasoActual - 1].descripcion}</CardDescription>
